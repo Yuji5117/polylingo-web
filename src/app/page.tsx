@@ -11,6 +11,8 @@ export default function Home() {
   const [toLanguage, setToLanguage] = useState<LanguageCode>("ja");
   const [text, setText] = useState<string>("");
 
+  const isDisabled = text === "";
+
   const handleSwapLanguage = () => {
     const temp = fromLanguage;
     setFromLanguage(toLanguage);
@@ -36,7 +38,14 @@ export default function Home() {
       </div>
       <div className="flex flex-col gap-5">
         <TextInputArea value={text} onChange={setText} />
-        <button className="w-full bg-blue-500 text-white rounded-full p-2 shadow-md hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150">
+        <button
+          disabled={isDisabled}
+          className={`w-full rounded-full p-2 shadow-md transition-colors duration-150 ${
+            isDisabled
+              ? "bg-gray-200 cursor-not-allowed text-gray-400"
+              : "bg-blue-500 text-white hover:bg-blue-200 active:bg-blue-300"
+          }`}
+        >
           Translate
         </button>
       </div>
