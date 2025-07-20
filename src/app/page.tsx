@@ -36,6 +36,10 @@ export default function Home() {
     setSelectedChips((prev) => [...prev, option]);
   };
 
+  const handleChangeTextInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
+  };
+
   return (
     <div className="w-full my-6 flex flex-col gap-5">
       <div className="flex justify-center gap-10">
@@ -54,7 +58,7 @@ export default function Home() {
         />
       </div>
       <div className="flex flex-col gap-5">
-        <TextInputArea value={text} onChange={setText} />
+        <TextInputArea value={text} onChange={handleChangeTextInput} />
         <button
           disabled={isTranslationDisabled}
           className={`w-full rounded-full p-2 shadow-md transition-colors duration-150 ${
@@ -102,7 +106,9 @@ export default function Home() {
       </div>
       <div className="flex flex-col gap-2">
         <label className="text-blue-500">Explanation</label>
-        <div className="w-full bg-white p-2 rounded-md">「Hello!!」一般的に使用される挨拶です。</div>
+        <div className="w-full bg-white p-2 rounded-md">
+          「Hello!!」一般的に使用される挨拶です。
+        </div>
       </div>
     </div>
   );
