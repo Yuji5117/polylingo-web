@@ -18,7 +18,8 @@ export default function Home() {
   const [text, setText] = useState<string>("");
   const [selectedChips, setSelectedChips] = useState<ChipOption[]>([]);
 
-  const isDisabled = text === "";
+  const isTranslationDisabled = text === "";
+  const isExplanationDisabled = selectedChips.length === 0;
 
   const handleSwapLanguage = () => {
     const temp = fromLanguage;
@@ -55,9 +56,9 @@ export default function Home() {
       <div className="flex flex-col gap-5">
         <TextInputArea value={text} onChange={setText} />
         <button
-          disabled={isDisabled}
+          disabled={isTranslationDisabled}
           className={`w-full rounded-full p-2 shadow-md transition-colors duration-150 ${
-            isDisabled
+            isTranslationDisabled
               ? "bg-gray-200 cursor-not-allowed text-gray-400"
               : "bg-blue-500 text-white hover:bg-blue-200 active:bg-blue-300"
           }`}
@@ -70,6 +71,11 @@ export default function Home() {
         <div className="w-full bg-white p-2 rounded-md">Hello!!</div>
       </div>
       <div className="flex justify-start flex-wrap gap-2">
+        {selectedChips.length === 0 && (
+          <p className="text-sm text-gray-500 mb-2">
+            Select at least one category to get an explanation.
+          </p>
+        )}
         {CHIP_OPTIONS.map((opt) => {
           const isSelected = selectedChips.includes(opt);
           return (
@@ -81,6 +87,22 @@ export default function Home() {
             />
           );
         })}
+      </div>
+      <div className="flex justify-end">
+        <button
+          disabled={isExplanationDisabled}
+          className={`rounded-full py-2 px-6 shadow-md transition-colors duration-150 ${
+            isExplanationDisabled
+              ? "bg-gray-200 cursor-not-allowed text-gray-400"
+              : "bg-blue-500 text-white hover:bg-blue-200 active:bg-blue-300"
+          }`}
+        >
+          Explain
+        </button>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="text-blue-500">Explanation</label>
+        <div className="w-full bg-white p-2 rounded-md">「Hello!!」一般的に使用される挨拶です。</div>
       </div>
     </div>
   );
