@@ -18,7 +18,7 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full my-6 flex flex-col gap-6">
+    <div className="w-full my-6 flex flex-col gap-5">
       <div className="flex justify-center gap-10">
         <LanguageSelector
           value={fromLanguage}
@@ -34,8 +34,11 @@ export default function Home() {
           options={LANGUAGE_OPTIONS}
         />
       </div>
-      <div>
+      <div className="flex flex-col gap-5">
         <TextInputArea value={text} onChange={setText} />
+        <button className="w-full bg-blue-500 text-white rounded-full p-2 shadow-md hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150">
+          Translate
+        </button>
       </div>
     </div>
   );
