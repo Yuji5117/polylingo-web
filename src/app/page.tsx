@@ -49,6 +49,10 @@ export default function Home() {
           Translate
         </button>
       </div>
+      <div className="flex flex-col gap-2">
+        <label className="text-blue-500">Translation</label>
+        <div className="w-full bg-white p-2 rounded-md">Hello!!</div>
+      </div>
     </div>
   );
 }
