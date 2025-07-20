@@ -9,6 +9,12 @@ export default function Home() {
   const [fromLanguage, setFromLanguage] = useState<LanguageCode>("en");
   const [toLanguage, setToLanguage] = useState<LanguageCode>("ja");
 
+  const handleSwapLanguage = () => {
+    const temp = fromLanguage;
+    setFromLanguage(toLanguage);
+    setToLanguage(temp);
+  };
+
   return (
     <div className="w-full my-6">
       <div className="flex justify-center gap-10 px-4">
@@ -17,7 +23,7 @@ export default function Home() {
           onChange={setFromLanguage}
           options={LANGUAGE_OPTIONS}
         />
-        <button>
+        <button onClick={handleSwapLanguage}>
           <ArrowRightLeft className="w-4 h-4" />
         </button>
         <LanguageSelector
