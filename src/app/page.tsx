@@ -1,8 +1,14 @@
 "use client";
 
+import Chip from "@/components/Chip";
 import LanguageSelector from "@/components/LanguageSelector";
 import TextInputArea from "@/components/TextInputArea";
-import { LANGUAGE_OPTIONS, LanguageCode } from "@/constants";
+import {
+  CHIP_OPTIONS,
+  ChipOption,
+  LANGUAGE_OPTIONS,
+  LanguageCode,
+} from "@/constants";
 import { ArrowRightLeft } from "lucide-react";
 import { useState } from "react";
 
@@ -10,6 +16,7 @@ export default function Home() {
   const [fromLanguage, setFromLanguage] = useState<LanguageCode>("en");
   const [toLanguage, setToLanguage] = useState<LanguageCode>("ja");
   const [text, setText] = useState<string>("");
+  const [selectedChips, setSelectedChips] = useState<ChipOption[]>([]);
 
   const isDisabled = text === "";
 
@@ -17,6 +24,15 @@ export default function Home() {
     const temp = fromLanguage;
     setFromLanguage(toLanguage);
     setToLanguage(temp);
+  };
+
+  const selectChip = (option: ChipOption) => {
+    if (selectedChips.includes(option)) {
+      setSelectedChips((prev) => prev.filter((chip) => chip !== option));
+      return;
+    }
+
+    setSelectedChips((prev) => [...prev, option]);
   };
 
   return (
@@ -52,6 +68,19 @@ export default function Home() {
       <div className="flex flex-col gap-2">
         <label className="text-blue-500">Translation</label>
         <div className="w-full bg-white p-2 rounded-md">Hello!!</div>
+      </div>
+      <div className="flex justify-start flex-wrap gap-2">
+        {CHIP_OPTIONS.map((opt) => {
+          const isSelected = selectedChips.includes(opt);
+          return (
+            <Chip
+              key={opt}
+              label={opt}
+              onClick={selectChip}
+              isSelected={isSelected}
+            />
+          );
+        })}
       </div>
     </div>
   );
