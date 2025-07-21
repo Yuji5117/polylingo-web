@@ -9,15 +9,20 @@ import {
   LANGUAGE_OPTIONS,
   LanguageCode,
 } from "@/constants";
-import { ArrowRightLeft } from "lucide-react";
+import { ArrowRightLeft, Text } from "lucide-react";
 import { useState } from "react";
+
+type ExplanationType = {
+  title: string;
+  body: string;
+};
 
 export default function Home() {
   const [fromLanguage, setFromLanguage] = useState<LanguageCode>("en");
   const [toLanguage, setToLanguage] = useState<LanguageCode>("ja");
   const [text, setText] = useState<string>("");
   const [translatedResult, setTranslatedResult] = useState<string>("");
-  const [explainResult, setExplainResult] = useState<string>("");
+  const [explainResult, setExplainResult] = useState<ExplanationType[]>([]);
   const [selectedChips, setSelectedChips] = useState<ChipOption[]>([]);
 
   const isTranslationDisabled = text === "";
@@ -80,7 +85,17 @@ export default function Home() {
 
       const result = await response.json();
 
-      setExplainResult(result.data.explanation);
+      const sections: string[] = result.data.explanation
+        .trim()
+        .split(/##\s*/)
+        .filter(Boolean);
+
+      const explanationList = sections.map((section) => {
+        const split = section.trim().split("\n");
+        return { title: split[0], body: split[1] };
+      });
+
+      setExplainResult(explanationList);
     } catch (error) {
       console.error("解説エラー:", error);
     }
@@ -126,11 +141,10 @@ export default function Home() {
             </div>
           </div>
           <div className="flex justify-start flex-wrap gap-2">
-            {selectedChips.length === 0 && (
-              <p className="text-sm text-gray-500 mb-2">
-                Select at least one category to get an explanation.
-              </p>
-            )}
+            <p className="text-sm text-gray-500 mb-2">
+              Select at least one category to get an explanation.
+            </p>
+
             {CHIP_OPTIONS.map((opt) => {
               const isSelected = selectedChips.includes(opt);
               return (
@@ -167,7 +181,16 @@ export default function Home() {
       {translatedResult && explainResult && (
         <div className="flex flex-col gap-2">
           <label className="text-blue-500">Explanation</label>
-          <div className="w-full bg-white p-2 rounded-md">{explainResult}</div>
+          <div className="flex flex-col gap-5 w-full bg-white px-2 py-4 rounded-md">
+            {explainResult.map((exp) => (
+              <div className="flex flex-col gap-2" key={exp.title}>
+                <div className="text-blue-500 text-lg font-medium">
+                  {exp.title}
+                </div>
+                <div>{exp.body}</div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
