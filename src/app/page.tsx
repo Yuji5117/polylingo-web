@@ -57,10 +57,32 @@ export default function Home() {
       }
 
       const result = await response.json();
-      console.log("翻訳結果:", result.data.translated);
+
       setTranslatedResult(result.data.translated);
     } catch (error) {
       console.error("翻訳エラー:", error);
+    }
+  };
+
+  const handleExplainTranslatedText = async (
+    originalText: string,
+    translatedResult: string,
+    tags: ChipOption[]
+  ) => {
+    try {
+      const response = await fetch("api/explain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ originalText, translatedResult, tags }),
+      });
+
+      const result = await response.json();
+
+      setExplainResult(result.data.explanation);
+    } catch (error) {
+      console.error("解説エラー:", error);
     }
   };
 
@@ -124,6 +146,13 @@ export default function Home() {
           <div className="flex justify-end">
             <button
               disabled={isExplanationDisabled}
+              onClick={() =>
+                handleExplainTranslatedText(
+                  text,
+                  translatedResult,
+                  selectedChips
+                )
+              }
               className={`rounded-full py-2 px-6 shadow-md transition-colors duration-150 ${
                 isExplanationDisabled
                   ? "bg-gray-200 cursor-not-allowed text-gray-400"
@@ -138,9 +167,7 @@ export default function Home() {
       {translatedResult && explainResult && (
         <div className="flex flex-col gap-2">
           <label className="text-blue-500">Explanation</label>
-          <div className="w-full bg-white p-2 rounded-md">
-            「Hello!!」一般的に使用される挨拶です。
-          </div>
+          <div className="w-full bg-white p-2 rounded-md">{explainResult}</div>
         </div>
       )}
     </div>
