@@ -5,7 +5,7 @@ export const POST = async (req: NextRequest) => {
   const { text, to } = await req.json();
 
   if (!text || !to) {
-    throw new Error("Text should not be empty!");
+    throw new Error("Text and to should not be empty!");
   }
   const response = await fetch(`${env.TRANSLATION_API_KEY}/translate`, {
     method: "POST",
